@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import os
 
 # Emissions factors in kg CO2e per mile
 EMISSIONS_FACTORS = {
@@ -17,7 +18,10 @@ ACADEMIC_WEEKS = 28  # Number of weeks in academic year
 
 def load_and_calculate_data():
     """Load data and calculate miles and emissions by mode"""
-    df = pd.read_csv('cleaned_surveys_facts.csv')
+    # Update the file path to be relative to the script location
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    data_path = os.path.join(script_dir, '..', 'data', 'cleaned_surveys_facts.csv')
+    df = pd.read_csv(data_path)
     
     # Convert days columns to numeric, replacing NaN with 0
     mode_columns = ['days_walk', 'days_bike', 'days_drive_alone', 

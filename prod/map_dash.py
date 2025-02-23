@@ -3,10 +3,14 @@ import pandas as pd
 import folium
 from streamlit_folium import folium_static
 import numpy as np
+import os
 
 def load_and_prepare_data():
     """Load and prepare data for visualization"""
-    df = pd.read_csv('cleaned_surveys_facts.csv')
+    # Update the file path to be relative to the script location
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    data_path = os.path.join(script_dir, '..', 'data', 'cleaned_surveys_facts.csv')
+    df = pd.read_csv(data_path)
     
     # Filter to only rows with valid coordinates
     df = df.dropna(subset=['latitude', 'longitude'])
