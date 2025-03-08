@@ -165,20 +165,20 @@ def main():
     metric = st.sidebar.selectbox(
         'Metric',
         ['Miles', 'Emissions'],
-        index=0,  # Select first option (Miles)
+        index=0,
         format_func=lambda x: 'Miles' if x == 'Miles' else 'kg CO2e'
     )
     
     per_capita = st.sidebar.selectbox(
         'View',
         ['Total', 'Per Capita'],
-        index=1  # Select second option (Per Capita)
+        index=1
     ) == 'Per Capita'
     
     time_period = st.sidebar.selectbox(
         'Time Period',
         ['Week', 'Academic Year'],
-        index=1,  # Select second option (Academic Year)
+        index=1,
         format_func=lambda x: 'Weekly' if x == 'Week' else 'Academic Year'
     ).lower().replace(' ', '_')
     
@@ -189,11 +189,25 @@ def main():
         default=['Faculty', 'Staff', 'Student']
     )
     
+    # University housing filter
+    housing_options = ["Yes", "No", "Both"]
+    selected_housing = st.sidebar.radio(
+        "Lives in University Housing",
+        housing_options,
+        index=2  # Default to "Both"
+    )
+    
     # Apply filters
     filtered_df = df[
         (df['survey_year'].isin(selected_years)) &
         (df['primary_affiliation'].isin(selected_affiliations))
     ]
+    
+    # Apply housing filter
+    if selected_housing != "Both":
+        filtered_df = filtered_df[
+            filtered_df['lives_in_university_housing'].str.contains(selected_housing, na=False)
+        ]
     
     # Display summary statistics for each selected year
     st.sidebar.header('Summary Statistics')

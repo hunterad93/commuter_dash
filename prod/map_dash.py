@@ -93,6 +93,14 @@ def main():
         default=modes
     )
     
+    # University housing filter
+    housing_options = ["Yes", "No", "Both"]
+    selected_housing = st.sidebar.radio(
+        "Lives in University Housing",
+        housing_options,
+        index=2  # Default to "Both"
+    )
+    
     # Student classification filter (only show if Students are selected)
     if 'Student' in selected_affiliations:
         student_classes = sorted(df[df['primary_affiliation'] == 'Student']['student_classification'].unique())
@@ -111,6 +119,12 @@ def main():
         (df['primary_mode'].isin(selected_modes)) &
         (df['student_classification'].isin(selected_classes) | (df['student_classification'].isna()))
     ]
+    
+    # Apply housing filter
+    if selected_housing != "Both":
+        filtered_df = filtered_df[
+            filtered_df['lives_in_university_housing'].str.contains(selected_housing, na=False)
+        ]
     
     # Display stats
     st.sidebar.header('Statistics')
